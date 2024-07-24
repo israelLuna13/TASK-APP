@@ -9,7 +9,7 @@ declare global {
         }
     }
 }
-//validate them if the project exist
+//we validate if the project exist
 export async function validateProjectExists(req:Request,res:Response,next:NextFunction){
     try {
         const {projectId} = req.params

@@ -12,7 +12,7 @@ export type TaskStatus = typeof taskStatus[keyof typeof taskStatus]
 //type of model project
 //document ensuring that each object of this type weill have the properties and methods of a mongoose
 export interface ITask extends Document  {
-    projectName:string,
+    name:string,
     description:string,
     project:Types.ObjectId,
     status:TaskStatus

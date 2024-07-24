@@ -7,7 +7,7 @@ export class ProjectController{
         const project = new Project(req.body)
         try {
             await project.save()
-            res.send('Proyecto creado Correctamente')
+            res.send('Project created successfully')
         } catch (error) {
             console.log(error);
         }        
@@ -20,13 +20,14 @@ export class ProjectController{
         } catch (error) {
             console.log(error);
         }
-
     }
+
+    //get  project with all information of a task that it have these project
     static getProjectById = async(req:Request, res:Response)=>{
-        
         const {id} = req.params
         try {
-            const project = await Project.findById(id)
+            //popula is like where in a sql query
+            const project = await Project.findById(id).populate('tasks').populate('tasks')
             if(!project){
                 const error = new Error('Project not found')
                 return res.status(404).json({error:error.message})
@@ -55,7 +56,6 @@ export class ProjectController{
     }
 
     static deleteProject = async(req:Request, res:Response)=>{
-        
         const {id} = req.params
         try {
             const project = await Project.findById(id)
@@ -65,9 +65,7 @@ export class ProjectController{
             }
            await project.deleteOne()
             console.log(project);
-            
             res.send('Project deleted')
-           
         } catch (error) {
             console.log(error);
         }

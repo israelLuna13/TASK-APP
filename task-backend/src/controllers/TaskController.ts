@@ -38,23 +38,23 @@ export class TaskController{
             res.status(500).json({error:'Hubo un error'})
         }
     }
+    //------------------------------------------------the code repetitive  the some methods move to the middleware task------------------------------------------------
 
-    
     static getTaskById =async (req:Request, res:Response)=>{
         try {
-            const {taskid} = req.params
-            const task = await Task.findById(taskid)
-            //if task not found
-            if(!task){
-                const error = new Error('Task not found')
-                return res.status(404).json({error:error.message})
-            }
+            // const {taskid} = req.params
+            // const task = await Task.findById(taskid)
+            // //if task not found
+            // if(!task){
+            //     const error = new Error('Task not found')
+            //     return res.status(404).json({error:error.message})
+            // }
             //We validate that a URL request id is the same as a task id that is in the database
-            if(task.project.toString() !== req.project.id){
-                const error = new Error('Action not valide')
-                return res.status(400).json({error:error.message})
-            }
-            res.json(task)
+            // if(req.task.project.toString() !== req.project.id){
+            //     const error = new Error('Action not valide')
+            //     return res.status(400).json({error:error.message})
+            // }
+            res.json(req.task)
             
         } catch (error) {
             res.send(500).json({error:'Hubo un error'})
@@ -63,22 +63,22 @@ export class TaskController{
 
 static updateTask =async (req:Request, res:Response)=>{
     try {
-        const {taskid} = req.params
-        const task = await Task.findById(taskid)
-        //if task not found
-        if(!task){
-            const error = new Error('Task not found')
-            return res.status(404).json({error:error.message})
-        }
+        // const {taskid} = req.params
+        // const task = await Task.findById(taskid)
+        // //if task not found
+        // if(!task){
+        //     const error = new Error('Task not found')
+        //     return res.status(404).json({error:error.message})
+        // }
         //We validate that a URL request id is the same as a task id that is in the database
-        if(task.project.toString() !== req.project.id){
-            const error = new Error('Action not valide')
-            return res.status(400).json({error:error.message})
-        }
+        // if(req.task.project.toString() !== req.project.id){
+        //     const error = new Error('Action not valide')
+        //     return res.status(400).json({error:error.message})
+        // }
        
-        task.name = req.body.name
-        task.description = req.body.description
-        await task.save()
+        req.task.name = req.body.name
+        req.task.description = req.body.description
+        await req.task.save()
         res.json('Task updated succesfult')
         
     } catch (error) {
@@ -88,22 +88,21 @@ static updateTask =async (req:Request, res:Response)=>{
 
 static deleteTask =async (req:Request, res:Response)=>{
     try {
-        const {taskid} = req.params
-        const task = await Task.findById(taskid, req.body)
-        //if task not found
-        if(!task){
-            const error = new Error('Task not found')
-            return res.status(404).json({error:error.message})
-        }
+        // const {taskid} = req.params
+        // const task = await Task.findById(taskid)
+        // //if task not found
+        // if(!task){
+        //     const error = new Error('Task not found')
+        //     return res.status(404).json({error:error.message})
+        // }
         //We validate that a URL request id is the same as a task id that is in the database
-        if(task.project.toString() !== req.project.id){
-            const error = new Error('Action not valide')
-            return res.status(400).json({error:error.message})
-        }
+        // if(req.task.project.toString() !== req.project.id){
+        //     const error = new Error('Action not valide')
+        //     return res.status(400).json({error:error.message})
+        // }
 
-        req.project.tasks = req.project.tasks.filter(task => task._id.toString() !== taskid)
-        console.log(req.project.tasks);
-        await Promise.allSettled([task.deleteOne(),req.project.save()])
+        req.project.tasks = req.project.tasks.filter(task => task._id.toString() !== req.task._id.toString())
+        await Promise.allSettled([req.task.deleteOne(),req.project.save()])
         res.json('Task delete succesfuly')
         
     } catch (error) {
@@ -111,4 +110,24 @@ static deleteTask =async (req:Request, res:Response)=>{
     }
 }
 
+static updateStatus =async (req:Request, res:Response)=>{
+  
+    try {
+        // const {taskid} = req.params
+        // const task = await Task.findById(taskid)
+
+        //    //We validate that a URL request id is the same as a task id that is in the database
+        //    if(task.project.toString() !== req.project.id){
+        //     const error = new Error('Action not valide')
+        //     return res.status(400).json({error:error.message})
+        // }
+        const {status} = req.body
+        req.task.status=status
+        await req.task.save()
+        res.send('Task Update')
+
+    } catch (error) {
+        res.status(500).json({error:'Hubo un error'})
+    }
+}
 }

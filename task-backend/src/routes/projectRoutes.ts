@@ -3,7 +3,8 @@ import { ProjectController } from '../controllers/ProjectController'
 import {body,param} from 'express-validator'
 import { handleInputErros } from '../middleware/validation'
 import { TaskController } from '../controllers/TaskController'
-import { validateProjectExists } from '../middleware/project'
+import {  projectExists} from '../middleware/project'
+import { taskExists, tasksBelongsToProject } from '../middleware/task'
 const router = Router()
     //-------------------------------------------------------------------routes project------------------------------------------------------------------- 
 
@@ -32,7 +33,8 @@ router.post('/',
 
     //-------------------------------------------------------------------routes task------------------------------------------------------------------- 
    
-    router.param('projectId',validateProjectExists)
+    //all routes that it have projectId it execute the middleware projectExists,not to put into the controller
+    router.param('projectId',projectExists)
 
     router.post('/:projectId/task',
         body('name').notEmpty().withMessage('The name of task is obligation'),
@@ -43,6 +45,11 @@ router.post('/',
       router.get('/:projectId/task',
         TaskController.getProjectTasks
       )
+
+      //all routes that it have taskid it execute the middleware taskExists and tasksBelongsToProject ,not to put into the controller
+      router.param('taskid',taskExists)
+      router.param('taskid',tasksBelongsToProject)
+
       router.get('/:projectId/task/:taskid',
         param('taskid').isMongoId().withMessage('Not valid id'),
         handleInputErros,
@@ -55,8 +62,13 @@ router.post('/',
         handleInputErros,
         TaskController.updateTask)
 
-        router.delete('/:projectId/task/:taskid',
+      router.delete('/:projectId/task/:taskid',
           param('taskid').isMongoId().withMessage('Not valid id'),
           handleInputErros,
           TaskController.deleteTask)
+
+      router.post('/:projectId/task/:taskid/status',
+            body('status').notEmpty().withMessage('The state is obligate'),
+            handleInputErros,
+            TaskController.updateStatus)
 export default router

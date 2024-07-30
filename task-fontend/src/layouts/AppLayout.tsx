@@ -1,4 +1,6 @@
 import { Outlet } from "react-router-dom";
+import {ToastContainer} from 'react-toastify'
+import 'react-toastify/ReactToastify.css'
 import Logo from "@/components/Logo";
 import NavMenu from "@/components/NavMenu";
 export default function AppLayout() {
@@ -21,6 +23,12 @@ export default function AppLayout() {
           Todos los derechos reservados {new Date().getFullYear()}
         </p>
       </footer>
+
+      {/* message that will show in ou screen when all be success or exist error */}
+      <ToastContainer
+        pauseOnHover={false}
+        pauseOnFocusLoss={false}
+      />
     </>
   );
 

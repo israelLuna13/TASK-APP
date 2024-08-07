@@ -3,16 +3,38 @@ import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getProject } from "@/api/ProjectAPI";
+import { useQuery,useMutation,useQueryClient } from "@tanstack/react-query";
+import { deleteProject, getProject } from "@/api/ProjectAPI";
+import { toast } from "react-toastify";
 
 export default function DashboardView() {
+  //query to get all projects
   const { data, isLoading } = useQuery({
-    queryKey: ["prjects"],
+    queryKey: ["projects"],
     queryFn: getProject,
   });
 
+  //we use this hook to do new fetch or new query
+  const queryClient=useQueryClient()
+  
+  //mutation to detele project
+  const {mutate} = useMutation({
+    mutationFn:deleteProject, //function
+    //if it is error
+    onError:(error)=>{
+      toast.error(error.message)
+    },
+    //if not it is error
+    onSuccess:(data)=>{
+      toast.success(data)
+      //we do a new fetch to get the data new
+      queryClient.invalidateQueries({queryKey:['projects']})
+
+    }
+  })
+
   if (isLoading) return "Cargando...";
+console.log(data);
 
   if (data)
     return (
@@ -87,7 +109,7 @@ export default function DashboardView() {
                         </Menu.Item>
                         <Menu.Item>
                           <Link
-                            to={``}
+                            to={`/projects/${project._id}/edit`}
                             className="block px-3 py-1 text-sm leading-6 text-gray-900"
                           >
                             Edit project
@@ -97,7 +119,7 @@ export default function DashboardView() {
                           <button
                             type="button"
                             className="block px-3 py-1 text-sm leading-6 text-red-500"
-                            onClick={() => {}}
+                            onClick={() => mutate(project._id)}
                           >
                             Delete Project
                           </button>

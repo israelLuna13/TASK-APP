@@ -14,7 +14,7 @@ export default function AddTaskModal() {
     //read if modal exist
     const location = useLocation() // return current route
     const queryParams = new URLSearchParams(location.search) // we get the query
-    const modalTask = queryParams.get('newTask') // we get value of param , in this case will be true 
+    const modalTask = queryParams.get('newTask') // we get value of query string
     const show = modalTask ? true : false //show modal or not 
 
     //get projectid

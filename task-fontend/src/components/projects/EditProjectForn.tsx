@@ -44,12 +44,11 @@ export default function EditProjectForm({data,projectId}:EditProjectFormProps) {
         const handleForm = (formData:ProjectFormData)=>{
             //mutate only take one argument but out function take 2 arguments
             //so , we created a object with the 2 arguments to mutate
-        const data = {
-            formData,
-            projectId
-        }
-        mutate(data)
-        
+          const data = {
+              formData,
+              projectId
+          }
+          mutate(data)
         }
   return (
     <>

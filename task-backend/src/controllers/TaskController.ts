@@ -63,18 +63,18 @@ export class TaskController{
 
 static updateTask =async (req:Request, res:Response)=>{
     try {
-        // const {taskid} = req.params
-        // const task = await Task.findById(taskid)
-        // //if task not found
-        // if(!task){
-        //     const error = new Error('Task not found')
-        //     return res.status(404).json({error:error.message})
-        // }
+        const {taskid} = req.params
+        const task = await Task.findById(taskid)
+        //if task not found
+        if(!task){
+            const error = new Error('Task not found')
+            return res.status(404).json({error:error.message})
+        }
         //We validate that a URL request id is the same as a task id that is in the database
-        // if(req.task.project.toString() !== req.project.id){
-        //     const error = new Error('Action not valide')
-        //     return res.status(400).json({error:error.message})
-        // }
+        if(req.task.project.toString() !== req.project.id){
+            const error = new Error('Action not valide')
+            return res.status(400).json({error:error.message})
+        }
        
         req.task.name = req.body.name
         req.task.description = req.body.description
@@ -82,7 +82,7 @@ static updateTask =async (req:Request, res:Response)=>{
         res.json('Task updated succesfult')
         
     } catch (error) {
-        res.send(500).json({error:'Hubo un error'})
+        res.status(500).json({error:'Hubo un error'})
     }
 }
 

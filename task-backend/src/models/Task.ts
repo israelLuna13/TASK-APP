@@ -2,8 +2,8 @@ import mongoose,{Schema, Document,Types} from 'mongoose'
 //diccionario value of state the task
 const taskStatus={
     PENDING: 'pendig',
-    ON_HOLD:'onhold',
-    IN_PROGRESS:'inprogress',
+    ON_HOLD:'onHold',
+    IN_PROGRESS:'inProgress',
     UNDER_REVIEW:'underReview',
     COMPLETED:'completed'
 } as const //only will read 

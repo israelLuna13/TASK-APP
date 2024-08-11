@@ -39,7 +39,7 @@ export default function AddTaskModal() {
         },
         onSuccess:(data)=>{
             //when we created a task we will execute the query to get a project by id, to upload the page
-            queryClient.invalidateQueries({queryKey:["editProject",projectId]})
+            queryClient.invalidateQueries({queryKey:["project",projectId]})
             toast.success(data)
             reset() // reset form
             navigate(location.pathname,{replace:true})//we delete the query of the url to hidden the modal

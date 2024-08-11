@@ -1,10 +1,12 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getTaskByid } from '@/api/TaskAPI';
+import { useQuery, useMutation,useQueryClient } from '@tanstack/react-query';
+import { getTaskByid, updateStatus } from '@/api/TaskAPI';
 import { toast } from 'react-toastify';
 import { formatDate } from '@/utils/utils';
+import { statusTranslations } from '@/locales/es';
+import { TaskStatus } from '@/types/index';
 
 export default function TaskModalDetails() {
   
@@ -26,11 +28,38 @@ export default function TaskModalDetails() {
         retry:false
     })
 
+    const queryClient = useQueryClient()
+    //mutation to change state
+    const {mutate} = useMutation({
+        mutationFn:updateStatus,
+        onError:(error)=>{
+            toast.error(error.message)
+        },
+        onSuccess:(data)=>{
+            //when we changed status , we will do fetch of projectById and taskById to bring new data and show in the page 
+            queryClient.invalidateQueries({queryKey:['project',projectId]})
+            queryClient.invalidateQueries({queryKey:['task',taskId]})
+            toast.success(data)
+        }
+    })
+
+    //when change the select , we update the status in the database
+    const handleChangue =(e: React.ChangeEvent<HTMLSelectElement>)=>{
+        const status = e.target.value as TaskStatus
+        const data= {
+            projectId,
+            taskId,
+            status
+        }
+        mutate(data)
+    }
+
     if(isError){
         // the toastId is so that it doesn't show up twice for double render of react
         toast.error(error.message,{toastId:'error'})
         return <Navigate to={`/projects/${projectId}`}/>
     }
+
     
     if(data) return (
         <>
@@ -71,6 +100,16 @@ export default function TaskModalDetails() {
                                     <p className='text-lg text-slate-500 mb-2'>Description: {data.description}:</p>
                                     <div className='my-5 space-y-3'>
                                         <label className='font-bold'>Current status: {data.status}</label>
+                                        <select name="" id="" 
+                                            className='w-full bg-white border border-gray-300' 
+                                            defaultValue={data.status} 
+                                            onChange={handleChangue}>
+                                                {/* show the values of the status */}
+                                            {Object.entries(statusTranslations).map(([key,value])=>(
+                                                <option value={key} key={key}>{value}</option>
+
+                                            ))}
+                                        </select>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

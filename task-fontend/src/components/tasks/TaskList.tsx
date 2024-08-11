@@ -1,6 +1,7 @@
 import { Task } from "@/types/index"
 import TaskCard from "./TaskCard"
-
+import { statusTranslations } from "@/locales/es"
+//import { statusTranslations } from "@/locales/es"
 type TaskListProps = {
    tasks:Task[] 
 }
@@ -24,13 +25,7 @@ const statusStyles : {[key:string]:string}= {
     underReview:'border-t-amber-500',
     completed:'border-t-emerald-500'
 }
-// const statusTranslations : {[key:string]:string}= {
-//     pendig:'Pendiente',
-//     onHold:'En espera',
-//     inProgress:'En progreso',
-//     underReview:'En Revision',
-//     completed:'Completado'
-// }
+
 export default function TaskList({tasks}:TaskListProps) {
 
     //we make group of status with his tasks
@@ -51,7 +46,7 @@ export default function TaskList({tasks}:TaskListProps) {
 
                                                                                 {/* depending of the status we put a diferent color */}
             <h3 className={`capitalize text-xl font-light border border-slate-300 bg-white p-3 border-t-8 ${statusStyles[status]}`}>
-             {status}
+              {statusTranslations[status]}
             </h3>
 
             <ul className="mt-5 space-y-5">

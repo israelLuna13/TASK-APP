@@ -33,14 +33,15 @@ export default function EditTaskModal({data,taskId}:EditTaskModalProps) {
         },
         onSuccess:(data)=>{
             //when we created a task we will execute the query to get a project by id, to upload the page
-            queryClient.invalidateQueries({queryKey:["editProject",projectId]})
+            queryClient.invalidateQueries({queryKey:["project",projectId]})
+            queryClient.invalidateQueries({queryKey:["task",taskId]})
             toast.success(data)
             reset() // reset form
             navigate(location.pathname,{replace:true})//we delete the query of the url to hidden the modal
         }
-
     })
 
+    //
     const handleEditTAsk=(formData:TaskFormData)=>{
         const data = {
             projectId,
@@ -52,6 +53,7 @@ export default function EditTaskModal({data,taskId}:EditTaskModalProps) {
 
     return (
         <Transition appear show={true} as={Fragment}>
+                                                       {/* we delete queryString of the URL to close modal   */}
             <Dialog as="div" className="relative z-10" onClose={() => navigate(location.pathname,{replace:true}) }>
                 <Transition.Child
                     as={Fragment}
@@ -84,7 +86,7 @@ export default function EditTaskModal({data,taskId}:EditTaskModalProps) {
                                     Edit Task
                                 </Dialog.Title>
 
-                                <p className="text-xl font-bold">Realiza cambios a una tarea en {''}
+                                <p className="text-xl font-bold">Make changes to a task in {''}
                                     <span className="text-fuchsia-600">This form</span>
                                 </p>
 

@@ -53,7 +53,6 @@ export default function TaskList({tasks}:TaskListProps) {
               {tasks.length === 0 ? (
                 <li className="text-gray-500 text-center pt-3">
                   Not there is task
-                  {tasks.length}
                 </li>
               ) : (
 

@@ -34,7 +34,6 @@ export default function DashboardView() {
   })
 
   if (isLoading) return "Cargando...";
-console.log(data);
 
   if (data)
     return (

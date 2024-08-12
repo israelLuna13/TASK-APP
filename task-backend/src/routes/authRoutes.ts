@@ -16,6 +16,11 @@ router.post('/create-account',
     }),
     body('email').isEmail().withMessage('Email not valide'),
     handleInputErros,
-    AuthController.createAccount
-)
+    AuthController.createAccount)
+    
+    router.post('/confirm-account',
+        body('token').notEmpty().withMessage('The Token cant to be empty'),
+        handleInputErros,
+        AuthController.confirmAccount
+    )
 export default router

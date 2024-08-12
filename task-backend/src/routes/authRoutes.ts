@@ -23,4 +23,11 @@ router.post('/create-account',
         handleInputErros,
         AuthController.confirmAccount
     )
+
+    router.post('/login',
+        body('email').isEmail().withMessage('Email not valide'),
+        body('password').notEmpty().withMessage('The password not cant be empty'),
+        handleInputErros,
+        AuthController.login
+    )
 export default router

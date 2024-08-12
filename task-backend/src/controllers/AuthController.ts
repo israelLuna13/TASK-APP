@@ -1,6 +1,6 @@
 import type { Request,Response } from "express"
 import User from "../models/User"
-import { hashPassword } from "../utils/auth"
+import { checkPassword, hashPassword } from "../utils/auth"
 import Token from "../models/Token"
 import { generateToken } from "../utils/token"
 import {AuthEMail} from '../emails/AUthEmail'
@@ -48,7 +48,7 @@ export class AuthController {
 
             if(!tokenExist){
                 const error = new Error('Token not valide')
-                return res.status(401).json({error:error.message})
+                return res.status(404).json({error:error.message})
             }
 
             const user = await User.findById(tokenExist.user)
@@ -61,5 +61,46 @@ export class AuthController {
             res.status(500).json({error:'There was error'})
         }
 
+    }
+
+    static login= async (req:Request,res:Response)=>{
+        try {
+            
+            const {email,password} = req.body
+            const user = await User.findOne({email})
+            if(!user){
+                const error = new Error('User not exist')
+                return res.status(404).json({error:error.message})
+            }
+
+            if(!user.confirmed){
+                const token = new Token()
+                token.user = user.id
+                token.token = generateToken()
+                await token.save()
+                            //Send email
+                    AuthEMail.sendConfirmationEmail({
+                        email:user.email,
+                        name:user.name,
+                        token:token.token
+                    })
+
+                const error = new Error('The account not it was confirmed, We have send email the confirm')
+                return res.status(401).json({error:error.message})
+            }
+
+            //check password
+            const isPasswordCorrect = await checkPassword(password,user.password)
+            console.log(isPasswordCorrect);
+            
+            if(!isPasswordCorrect){
+                const error = new Error('Password Incorrect')
+                return res.status(401).json({error:error.message})
+            }
+
+            res.send('Authenticate')
+        } catch (error) {
+            res.status(500).json({error:'There was error'})
+        }
     }
 }

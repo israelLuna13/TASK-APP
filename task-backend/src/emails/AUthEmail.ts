@@ -24,4 +24,23 @@ export class AuthEMail{
         
 
     }
+
+    static sendPasswordResetToken = async (user:IEMail)=>{
+        //send email
+      const info=  await transporter.sendMail({
+            from:'UpTask <admin@uptask.com>',
+            to:user.email,
+            subject:'UpTask - Reset ypur password',
+            html:`<p>Hola: ${user.name}, Have you reset your password </p>
+                    <p>Visit the next link</p>
+                    <a href="${process.env.FRONTEND_URL}/auth/new-password">Reset password</a>
+                    <p>Put the code: <b>${user.token}</b></p>
+                    <p>This token will expired in 10 minutes</p>
+                    `
+        })
+
+        console.log('Message sended',info.messageId);
+        
+
+    }
 }

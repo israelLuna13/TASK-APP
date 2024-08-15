@@ -18,6 +18,8 @@ export default function NewPasswordForm({token}:NewPasswordFormProps) {
     }
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm({ defaultValues: initialValues });
 
+    //mutation to update password with token
+
     const {mutate}=useMutation({
         mutationFn:updatePasswordWithToken,
         onError:(error)=>{
@@ -57,13 +59,13 @@ export default function NewPasswordForm({token}:NewPasswordFormProps) {
 
                     <input
                         type="password"
-                        placeholder="Password de Registro"
+                        placeholder="Registration password"
                         className="w-full p-3  border-gray-300 border"
                         {...register("password", {
-                            required: "El Password es obligatorio",
+                            required: "The password is required",
                             minLength: {
                                 value: 8,
-                                message: 'El Password debe ser mínimo de 8 caracteres'
+                                message: 'The password must be at least 8 characters'
                             }
                         })}
                     />
@@ -80,11 +82,11 @@ export default function NewPasswordForm({token}:NewPasswordFormProps) {
                     <input
                         id="password_confirmation"
                         type="password"
-                        placeholder="Repite Password de Registro"
+                        placeholder="Registration password again"
                         className="w-full p-3  border-gray-300 border"
                         {...register("password_confirmation", {
-                            required: "Repetir Password es obligatorio",
-                            validate: value => value === password || 'Los Passwords no son iguales'
+                            required: "Repit password is required",
+                            validate: value => value === password || 'The passwords is not same'
                         })}
                     />
 

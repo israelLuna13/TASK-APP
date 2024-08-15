@@ -4,6 +4,7 @@ import { checkPassword, hashPassword } from "../utils/auth"
 import Token from "../models/Token"
 import { generateToken } from "../utils/token"
 import {AuthEMail} from '../emails/AUthEmail'
+import { generateJWT } from "../utils/jwt"
 export class AuthController {
     static createAccount= async (req:Request,res:Response)=>{
        try {
@@ -97,8 +98,8 @@ export class AuthController {
                 const error = new Error('Password Incorrect')
                 return res.status(401).json({error:error.message})
             }
-
-            res.send('Authenticate')
+            const token = generateJWT({id:user.id})
+            res.send(token)
         } catch (error) {
             res.status(500).json({error:'There was error'})
         }

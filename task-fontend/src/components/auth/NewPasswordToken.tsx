@@ -22,10 +22,12 @@ export default function NewPasswordToken({token,setToken,setIsValidToken}:NewPas
             setIsValidToken(true)
         }
     })
-
+    //when we wrote in a text field
     const handleChange = (token: ConfirmToken['token']) => {
         setToken(token)
     }
+
+    // when we finished to writing token
     const handleComplete = (token: ConfirmToken['token']) => {
         mutate({token})
     }
@@ -37,7 +39,7 @@ export default function NewPasswordToken({token,setToken,setIsValidToken}:NewPas
             >
                 <label
                     className="font-normal text-2xl text-center block"
-                >Código de 6 dígitos</label>
+                >Code of 6 digits</label>
                 <div className="flex justify-center gap-5">
                     <PinInput value={token} onChange={handleChange} onComplete={handleComplete}>
                         <PinInputField className="h-10 w-10 p-3 rounded-lg border-gray-300 border placeholder-white" />
@@ -54,7 +56,7 @@ export default function NewPasswordToken({token,setToken,setIsValidToken}:NewPas
                     to='/auth/forgot-password'
                     className="text-center text-gray-300 font-normal"
                 >
-                    Solicitar un nuevo Código
+                    Request new token
                 </Link>
             </nav>
         </>

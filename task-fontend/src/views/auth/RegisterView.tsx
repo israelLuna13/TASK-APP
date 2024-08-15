@@ -102,7 +102,7 @@ export default function RegisterView() {
               required: "The password is required",
               minLength: {
                 value: 8,
-                message: 'The password must be at least 8 characters.'
+                message: 'The password must be at least 8 characters'
               }
             })}
           />

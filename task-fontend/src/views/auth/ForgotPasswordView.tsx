@@ -47,13 +47,13 @@ export default function ForgotPasswordView() {
           <input
             id="email"
             type="email"
-            placeholder="Email de Registro"
+            placeholder="Registration email"
             className="w-full p-3  border-gray-300 border"
             {...register("email", {
-              required: "El Email de registro es obligatorio",
+              required: "The email is required",
               pattern: {
                 value: /\S+@\S+\.\S+/,
-                message: "E-mail no válido",
+                message: "E-mail not valide",
               },
             })}
           />
@@ -74,14 +74,14 @@ export default function ForgotPasswordView() {
           to='/auth/login'
           className="text-center text-gray-300 font-normal"
         >
-          ¿Ya tienes cuenta? Iniciar Sesión
+          You have account? Login
         </Link>
 
         <Link
           to='/auth/register'
           className="text-center text-gray-300 font-normal"
         >
-          ¿No tienes cuenta? Crea una
+          ¿You not have account? Create
         </Link>
       </nav>
     </>

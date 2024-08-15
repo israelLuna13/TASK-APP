@@ -5,7 +5,8 @@ export class ProjectController{
     static createProject = async(req:Request, res:Response)=>{
 
         const project = new Project(req.body)
-        console.log(req.user);
+        //put the manager in the project
+        project.manager = req.user.id
         
         try {
             await project.save()
@@ -17,7 +18,14 @@ export class ProjectController{
 
     static getAllProjects = async(req:Request, res:Response)=>{
         try {
-            const projects = await Project.find({})
+            const projects = await Project.find({
+                //condition, only we bring the project of the person who is in session
+                $or:[
+                    {
+                        manager:{$in:req.user.id}
+                    }
+                ]
+            })
             res.json(projects)
         } catch (error) {
             console.log(error);
@@ -34,6 +42,11 @@ export class ProjectController{
                 const error = new Error('Project not found')
                 return res.status(404).json({error:error.message})
             }
+                   //We validate that the person who is in session is the owner of the project
+            if(project.manager.toString() != req.user.id.toString()){
+                const error = new Error('Action not validate')
+                return res.status(404).json({error:error.message})
+            }
             res.json(project)
         } catch (error) {
             console.log(error);
@@ -45,6 +58,11 @@ export class ProjectController{
         const project = await Project.findById(id)
         if(!project){
             const error = new Error('Project not found')
+            return res.status(404).json({error:error.message})
+        }
+               //We validate that the person who is in session is the owner of the project
+        if(project.manager.toString() != req.user.id.toString()){
+            const error = new Error('Only manager can update the project')
             return res.status(404).json({error:error.message})
         }
         project.clientName = req.body.clientName
@@ -66,6 +84,11 @@ export class ProjectController{
             const project = await Project.findById(id)
             if(!project){
                 const error = new Error('Project not found')
+                return res.status(404).json({error:error.message})
+            }
+            //We validate that the person who is in session is the owner of the project
+            if(project.manager.toString() != req.user.id.toString()){
+                const error = new Error('Only manager can delete the project')
                 return res.status(404).json({error:error.message})
             }
            await project.deleteOne()

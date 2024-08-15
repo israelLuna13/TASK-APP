@@ -10,6 +10,7 @@ const router = Router()
     //-------------------------------------------------------------------routes project------------------------------------------------------------------- 
 
 //create project
+//router.use(authenticate)
 router.post('/',authenticate,
     body('projectName').notEmpty().withMessage('The name of projects is obligation'),
     body('clientName').notEmpty().withMessage('The name of client is obligation'),
@@ -17,12 +18,12 @@ router.post('/',authenticate,
     handleInputErros,
     ProjectController.createProject)
     //get all project
-    router.get('/',ProjectController.getAllProjects)
+    router.get('/',authenticate,ProjectController.getAllProjects)
 
     //get project by id
-    router.get('/:id',param('id').isMongoId().withMessage('Not valid id'),handleInputErros,ProjectController.getProjectById)
+    router.get('/:id',authenticate,param('id').isMongoId().withMessage('Not valid id'),handleInputErros,ProjectController.getProjectById)
     //update project
-    router.put('/:id',
+    router.put('/:id',authenticate,
     param('id').isMongoId().withMessage('Not valid id'),
     body('projectName').notEmpty().withMessage('The name of projects is obligation'),
     body('clientName').notEmpty().withMessage('The name of client is obligation'),
@@ -30,7 +31,7 @@ router.post('/',authenticate,
     ,handleInputErros,ProjectController.updateProject)
 
     //delete project
-    router.delete('/:id',param('id').isMongoId().withMessage('Not valid id'),handleInputErros,ProjectController.deleteProject)
+    router.delete('/:id',authenticate,param('id').isMongoId().withMessage('Not valid id'),handleInputErros,ProjectController.deleteProject)
 
     //-------------------------------------------------------------------routes task------------------------------------------------------------------- 
    

@@ -3,6 +3,9 @@ import {dasboardProjectSchema, ProjectFormData} from '@/types/index'
 import { isAxiosError } from 'axios';
 import { Project } from '@/types/index';
 
+//--------------------------------in each request of axios will be the header with the token to give authorization-------------------------------------
+// to make changes in the projects , we need authorization 
+
 export async function createProject(formData:ProjectFormData){
     try {        
         const {data} = await api.post('/projects',formData)
@@ -18,8 +21,16 @@ export async function createProject(formData:ProjectFormData){
 
 //we get all project and we validate projects with the schema
 export async function getProject(){
-    try {        
-        const {data} = await api.get('/projects')
+    
+    try {  
+        const {data} = await api.get('/projects')   
+         
+        //other way the send header from the backend  
+        // const {data} = await api.get('/projects',{
+        //     headers:{
+        //         Authorization:`Bearer ${token}`
+        //     }
+        // })
         const response = dasboardProjectSchema.safeParse(data)
         if(response.success){
             return response.data

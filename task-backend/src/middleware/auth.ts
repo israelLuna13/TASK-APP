@@ -13,6 +13,7 @@ declare global{
 
 export const authenticate = async(req:Request,res:Response,next:NextFunction)=>{
    
+    //we get the bearer with the token from the headers
     const bearer = req.headers.authorization
    
     //we validate if there is token
@@ -33,7 +34,7 @@ export const authenticate = async(req:Request,res:Response,next:NextFunction)=>{
             // we put the user en el req
             if(user){
                 req.user = user
-
+                next()
             }else{
                 res.status(500).json({error:'Invalidate token'})
             }
@@ -42,8 +43,4 @@ export const authenticate = async(req:Request,res:Response,next:NextFunction)=>{
     } catch (error) {
         res.status(500).json({error:'Invalidate token'})
     }
-    
-    next()
-    
-
 }

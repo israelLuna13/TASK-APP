@@ -105,6 +105,7 @@ export class AuthController {
         }
     }
 
+    //send the token at the user to confirm her account
     static requestConfirmationCode= async (req:Request,res:Response)=>{
         try {
          const {email}=req.body
@@ -139,8 +140,6 @@ export class AuthController {
         }
  
      }
-
-
      
     static forgotPassword= async (req:Request,res:Response)=>{
         try {
@@ -190,7 +189,8 @@ export class AuthController {
 
     }
 
-    
+
+    //we change the password with token
     static updatePasswordWithToken= async (req:Request,res:Response)=>{
         try {
             const {token} = req.params
@@ -214,4 +214,10 @@ export class AuthController {
         }
 
     }
+
+    //we get the user in the session
+    static user= async (req:Request,res:Response)=>{
+      return res.json(req.user)
+    }
+   
 }

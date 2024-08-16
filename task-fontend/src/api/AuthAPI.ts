@@ -5,8 +5,10 @@ import {
   ForgotPasswordForm,
   NewPasswordForm,
   RequestConfirmationCodeForm,
+  User,
   UserLoginForm,
   UserRegistrationForm,
+  userShema,
 } from "../types";
 
 export async function createAccount(formData: UserRegistrationForm) {
@@ -90,4 +92,24 @@ export async function login(formData: UserLoginForm) {
             throw new Error(error.response?.data.error);
           }
         }
-}
+      }
+
+      //we get the user in session
+        export async function getUser(){
+          try {
+            //the data that we get is the type user 
+            const {data} = await api<User>('/auth/user')
+            // const response = userShema.safeParse(data)
+            // console.log(response);
+            
+            // if(response.success){
+            //   return data
+            // }
+            return data
+          } catch (error) {
+            if (isAxiosError(error) && error.message) {
+              throw new Error(error.response?.data.error);
+            }
+          }
+        }
+

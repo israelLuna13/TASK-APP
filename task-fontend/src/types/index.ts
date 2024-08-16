@@ -15,6 +15,16 @@ export type RequestConfirmationCodeForm = Pick<Auth, 'email'>
 export type ConfirmToken = Pick<Auth, 'token'>
 export type ForgotPasswordForm = Pick<Auth, 'email'>
 export type NewPasswordForm = Pick<Auth, 'password' | 'password_confirmation'>
+
+
+/**USERS */
+export const userShema=z.object({
+    _id:z.string(),
+    name:z.string(),
+    email:z.string(),
+})
+export type User = z.infer<typeof userShema>
+
 /*TASKS*/
 //schema of status
 export const taskStatusSchema = z.enum(["pendig" , "onHold" , "inProgress" , "underReview" , "completed"])

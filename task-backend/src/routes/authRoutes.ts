@@ -2,6 +2,7 @@ import {Router} from 'express'
 import { body, param } from 'express-validator'
 import { AuthController } from '../controllers/AuthController'
 import { handleInputErros } from '../middleware/validation'
+import { authenticate } from '../middleware/auth'
 const router = Router()
 router.post('/create-account',
     body('name').notEmpty().withMessage('The name not most empty'),
@@ -60,4 +61,7 @@ router.post('/create-account',
                 handleInputErros,
         AuthController.updatePasswordWithToken
     )
+
+    //route to get the user in session 
+    router.get('/user',authenticate,AuthController.user)
 export default router

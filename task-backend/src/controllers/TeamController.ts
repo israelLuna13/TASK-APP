@@ -12,7 +12,7 @@ export class TeamMemberController{
             const error = new Error('User not found')
             return res.status(404).json({error:error.message})
         }
-        res.json({user})
+        res.json(user)
     }
 
     static getProjectTeam =async(req:Request,res:Response,)=>{
@@ -45,15 +45,15 @@ export class TeamMemberController{
     }
 
     static removeMemberById =async(req:Request,res:Response,)=>{
-        const {id} = req.body   
+        const {userId} = req.params   
         //if the user is not on the project
-        if(!req.project.team.some(team=>team.toString() === id)){
+        if(!req.project.team.some(team=>team.toString() === userId)){
             const error = new Error('User not found in the project')
             return res.status(404).json({error:error.message})
         }
         
         //We bring what we do not want to erase
-        req.project.team = req.project.team.filter(teamMember => teamMember.toString() !== id)
+        req.project.team = req.project.team.filter(teamMember => teamMember.toString() !== userId)
         await req.project.save()
         res.send('User deleted successfull')
     }

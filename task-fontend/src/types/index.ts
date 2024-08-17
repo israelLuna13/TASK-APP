@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import {TypeOf, z} from 'zod'
 
 /**AUth & Users */
 const authSchema = z.object({
@@ -68,3 +68,14 @@ export const dasboardProjectSchema = z.array(
 export type Project = z.infer<typeof projectSchema>
 //type of one project but without id, becouse when we use this type , we will create a project and not will have a id 
 export type ProjectFormData = Pick<Project,'clientName'| 'projectName' |'description'>
+
+//team
+const teamMemberShema = userShema.pick({
+    name:true,
+    email:true,
+    _id:true
+})
+export const teamMembersShema = z.array(teamMemberShema)
+//export type teamMembersShema = z.infer< typeof teamMemberShema >
+export type TeamMember = z.infer<typeof teamMemberShema>
+export type TeamMemberForm = Pick<TeamMember,'email'>

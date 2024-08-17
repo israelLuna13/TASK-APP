@@ -8,7 +8,8 @@ export interface IProject extends Document  {
  clientName:string,
  description:string,
  tasks:PopulatedDoc<ITask & Document>[],
- manager:PopulatedDoc<IUser & Document>   
+ manager:PopulatedDoc<IUser & Document>,
+ team:PopulatedDoc<IUser & Document>[]  
 }
 //schema of project in the mongoode db collection
 const ProjectSchema:Schema = new Schema({
@@ -37,7 +38,14 @@ const ProjectSchema:Schema = new Schema({
     manager:{
         type:Types.ObjectId,
         ref:'User'
-    }
+    },
+    team:[
+        {
+            type:Types.ObjectId,
+            ref:'User'
+        },
+    ]
+
 },{timestamps:true})
 
 //Make the model with typescript type of IProject and structure of ProjectSchema

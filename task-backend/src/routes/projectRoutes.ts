@@ -6,11 +6,12 @@ import { TaskController } from '../controllers/TaskController'
 import {  projectExists} from '../middleware/project'
 import { taskExists, tasksBelongsToProject } from '../middleware/task'
 import { authenticate } from '../middleware/auth'
+import { TeamMemberController } from '../controllers/TeamController'
 const router = Router()
     //-------------------------------------------------------------------routes project------------------------------------------------------------------- 
 
 //create project
-//router.use(authenticate)
+//router.use(authenticate) //to not put authenticate in each route
 router.post('/',authenticate,
     body('projectName').notEmpty().withMessage('The name of projects is obligation'),
     body('clientName').notEmpty().withMessage('The name of client is obligation'),
@@ -73,4 +74,30 @@ router.post('/',authenticate,
             body('status').notEmpty().withMessage('The state is obligate'),
             handleInputErros,
             TaskController.updateStatus)
+
+//routes for teams
+        router.post('/:projectId/team/find',authenticate,
+          body('email').isEmail().toLowerCase().withMessage('E-mail not validate'),
+          handleInputErros,
+          TeamMemberController.findMemberByEmail
+        )
+
+        router.get('/:projectId/team',authenticate,
+          TeamMemberController.getProjectTeam
+        )
+
+        router.post('/:projectId/team',authenticate,
+          body('id').isMongoId().withMessage('Not valid id'),
+          handleInputErros,
+          TeamMemberController.addMemberById
+        )
+
+        router.delete('/:projectId/team',authenticate,
+          body('id').isMongoId().withMessage('Not valid id'),
+          handleInputErros,
+          TeamMemberController.removeMemberById
+        )
+
+
+
 export default router

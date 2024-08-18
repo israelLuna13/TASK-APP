@@ -1,4 +1,4 @@
-import {TypeOf, z} from 'zod'
+import {z} from 'zod'
 
 /**AUth & Users */
 const authSchema = z.object({
@@ -27,7 +27,7 @@ export type User = z.infer<typeof userShema>
 
 /*TASKS*/
 //schema of status
-export const taskStatusSchema = z.enum(["pendig" , "onHold" , "inProgress" , "underReview" , "completed"])
+export const taskStatusSchema = z.enum(["pending" , "onHold" , "inProgress" , "underReview" , "completed"])
 //type of the status of the tasks
 export type TaskStatus = z.infer<typeof taskStatusSchema>
 export const taskSchema = z.object({
@@ -35,6 +35,11 @@ export const taskSchema = z.object({
     name:z.string(),
     description:z.string(),
     status:taskStatusSchema,
+    completedBy:z.array(z.object({
+        _id:z.string(),
+        user:userShema,
+        status:taskStatusSchema
+    })),
     createdAt:z.string(),
     updatedAt:z.string()
 })

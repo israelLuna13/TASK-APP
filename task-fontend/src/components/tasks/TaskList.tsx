@@ -12,7 +12,7 @@ type GroupedTask={
 }
 //dictionary of task
 const initialStatusGroups:GroupedTask = {
-    pendig:[],
+    pending:[],
     onHold:[],
     inProgress:[],
     underReview:[],
@@ -20,7 +20,7 @@ const initialStatusGroups:GroupedTask = {
 }
 //this is dictionary to put the color to each status
 const statusStyles : {[key:string]:string}= {
-    pendig:'border-t-slate-500',
+    pending:'border-t-slate-500',
     onHold:'border-t-red-500',
     inProgress:'border-t-blue-500',
     underReview:'border-t-amber-500',

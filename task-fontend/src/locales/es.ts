@@ -4,7 +4,7 @@ export const statusTranslations : {[key:string]:string}= {
     // inProgress:'En progreso',
     // underReview:'En Revision',
     // completed:'Completado'
-    pendig:'Pending',
+    pending:'Pending',
     onHold:'On Hold',
     inProgress:'In Progress',
     underReview:'Under Revision',

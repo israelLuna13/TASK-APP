@@ -1,7 +1,7 @@
 import mongoose,{Schema, Document,Types} from 'mongoose'
-//diccionario value of state the task
+//dictionary of value of state the task
 const taskStatus={
-    PENDING: 'pendig',
+    PENDING: 'pending',
     ON_HOLD:'onHold',
     IN_PROGRESS:'inProgress',
     UNDER_REVIEW:'underReview',
@@ -15,7 +15,12 @@ export interface ITask extends Document  {
     name:string,
     description:string,
     project:Types.ObjectId,
-    status:TaskStatus
+    status:TaskStatus,
+    //we save the user that made changes in the state of task
+    completedBy:{
+        user:Types.ObjectId,
+        status:TaskStatus
+    }[]
    }
 
    
@@ -38,8 +43,21 @@ export interface ITask extends Document  {
         type:String,
         enum:Object.values(taskStatus),
         default:taskStatus.PENDING
+    },
+    completedBy:[
+    {
+        user: {
+            type:Types.ObjectId,
+            ref:'User',
+            default:null
+        },
+        status:{
+            type:String,
+            enum:Object.values(taskStatus),
+            default:taskStatus.PENDING
+        }
     }
-
+    ]
    },{timestamps:true})
 
 //Make the model with typescript type of ITask and structure of TaskSchema

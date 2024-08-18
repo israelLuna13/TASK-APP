@@ -52,7 +52,8 @@ export const projectSchema = z.object({
     _id:z.string(),
     projectName:z.string(),
     clientName:z.string(),
-    description:z.string()
+    description:z.string(),
+    manager:z.string(userShema.pick({_id:true}))
 })
 
 //this schema is to all projects
@@ -61,7 +62,8 @@ export const dasboardProjectSchema = z.array(
         _id:true,
         projectName:true,
         clientName:true,
-        description:true
+        description:true,
+        manager:true
     })
 )
 //type of one project

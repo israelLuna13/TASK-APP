@@ -4,6 +4,7 @@ import { statusTranslations } from "@/locales/es"
 //import { statusTranslations } from "@/locales/es"
 type TaskListProps = {
    tasks:Task[] 
+   canEdit: boolean
 }
 
 type GroupedTask={
@@ -26,7 +27,7 @@ const statusStyles : {[key:string]:string}= {
     completed:'border-t-emerald-500'
 }
 
-export default function TaskList({tasks}:TaskListProps) {
+export default function TaskList({tasks,canEdit}:TaskListProps) {
 
     //we make group of status with his tasks
     const groupedTasks = tasks.reduce((acc, task) => {
@@ -56,7 +57,7 @@ export default function TaskList({tasks}:TaskListProps) {
                 </li>
               ) : (
 
-                tasks.map((task) => <TaskCard key={task._id} task={task} />)
+                tasks.map((task) => <TaskCard key={task._id} task={task} canEdit={canEdit} />)
                 
               )}
             </ul>

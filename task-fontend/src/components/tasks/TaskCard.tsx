@@ -9,9 +9,10 @@ import { toast } from 'react-toastify';
 
 type TaskCardProps = {
     task:Task
+    canEdit: boolean
 }
 
-export default function TaskCard({task}:TaskCardProps) {
+export default function TaskCard({task,canEdit}:TaskCardProps) {
 
   const navigate = useNavigate()
   const params = useParams()
@@ -37,6 +38,8 @@ export default function TaskCard({task}:TaskCardProps) {
         <button
           className="text-xl font-bold text-slate-600 text-left"
           type="button"
+          // open modal to see details of task
+          onClick={()=>navigate(location.pathname + `?viewTask=${task._id}`)}
         >
           {task.name}
         </button>
@@ -63,12 +66,16 @@ export default function TaskCard({task}:TaskCardProps) {
                 <button
                   type="button"
                   className="block px-3 py-1 text-sm leading-6 text-gray-900"
+                    // open modal to see details of task
                   onClick={()=>navigate(location.pathname + `?viewTask=${task._id}`)}
                 >
                   See Task
                 </button>
               </Menu.Item>
-              <Menu.Item>
+              {/* we validate if the user in session it have permision to do change in the task, if is manage */}
+              {canEdit && (
+                <>
+                <Menu.Item>
                 <button
                   type="button"
                   className="block px-3 py-1 text-sm leading-6 text-gray-900"
@@ -89,6 +96,10 @@ export default function TaskCard({task}:TaskCardProps) {
                   Delete Task
                 </button>
               </Menu.Item>
+          
+                </>
+              )}
+              
             </Menu.Items>
           </Transition>
         </Menu>

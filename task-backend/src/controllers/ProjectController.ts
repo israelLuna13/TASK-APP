@@ -19,11 +19,10 @@ export class ProjectController{
     static getAllProjects = async(req:Request, res:Response)=>{
         try {
             const projects = await Project.find({
-                //condition, only we bring the project of the person who is in session
+                //condition, only we bring the project of the person who is in session and the user that to be in the team of the project
                 $or:[
-                    {
-                        manager:{$in:req.user.id}
-                    }
+                    {manager:{$in:req.user.id}},
+                    {team:{$in:req.user.id}}
                 ]
             })
             res.json(projects)
@@ -43,7 +42,7 @@ export class ProjectController{
                 return res.status(404).json({error:error.message})
             }
                    //We validate that the person who is in session is the owner of the project
-            if(project.manager.toString() != req.user.id.toString()){
+            if(project.manager.toString() != req.user.id.toString() && !project.team.includes(req.user.id)){
                 const error = new Error('Action not validate')
                 return res.status(404).json({error:error.message})
             }

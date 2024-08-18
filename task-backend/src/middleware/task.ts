@@ -35,3 +35,15 @@ export async function tasksBelongsToProject(req:Request,res:Response,next:NextFu
     next()//next middleware
 
 }
+
+//we validated if the user in session is a manage to do changes in the task
+export async function hasAuthorization(req:Request,res:Response,next:NextFunction){
+    
+    if(req.user.id.toString() !== req.project.manager.toString()){
+        const error = new Error('Action not valide')
+        return res.status(400).json({error:error.message})
+    }
+
+    next()//next middleware
+
+}

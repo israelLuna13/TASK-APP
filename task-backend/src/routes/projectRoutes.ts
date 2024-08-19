@@ -7,6 +7,8 @@ import {  projectExists} from '../middleware/project'
 import { hasAuthorization, taskExists, tasksBelongsToProject } from '../middleware/task'
 import { authenticate } from '../middleware/auth'
 import { TeamMemberController } from '../controllers/TeamController'
+import { NoteController } from '../controllers/NoteController'
+import Note from '../models/Note'
 const router = Router()
     //-------------------------------------------------------------------routes project------------------------------------------------------------------- 
 
@@ -57,7 +59,7 @@ router.post('/',
       router.param('taskid',taskExists)
       router.param('taskid',tasksBelongsToProject)
 
-      router.get('/:projectId/task/:taskid',
+      router.get('/:projectId/tasks/:taskid',
         param('taskid').isMongoId().withMessage('Not valid id'),
         handleInputErros,
         TaskController.getTaskById
@@ -104,6 +106,21 @@ router.post('/',
           TeamMemberController.removeMemberById
         )
 
+        //routes for notes
+        router.post('/:projectId/tasks/:taskid/notes',
+          body('content').notEmpty().withMessage('The content is required'),
+          handleInputErros,
+          NoteController.createNote
+        )
+        
+        router.get('/:projectId/tasks/:taskid/notes',
+          NoteController.getTaskNotas
+        )
 
+        router.delete('/:projectId/tasks/:taskid/notes/:noteId',
+          param('noteId').isMongoId().withMessage('Not valid id'),
+          handleInputErros,
+          NoteController.deleteNote
+        )
 
 export default router

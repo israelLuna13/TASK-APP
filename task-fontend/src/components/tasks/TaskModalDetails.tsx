@@ -22,7 +22,7 @@ export default function TaskModalDetails() {
 
   const queryParams = new URLSearchParams(location.search); //query string
   const taskId = queryParams.get("viewTask")!; // value of query string
-  const show = taskId ? true : false; // to close the modal
+  const show = taskId ? true : false; // to close the modal  
 
   //query to get task by id
   const { data, isError, error } = useQuery({
@@ -114,20 +114,25 @@ export default function TaskModalDetails() {
                       Description: {data.description}:
                     </p>
 
-                    {/* show user that change the state of task */}
-                    <p className="text-2xl text-slate-600">Changelog</p>
-                    <ul className="list-decimal">
-                        
-                      {data.completedBy.map((activityLog) => (
-                        <li key={activityLog._id}>
-                          <span className="font-bold text-slate-600">
-                            {statusTranslations[activityLog.status]}
-                          </span>{" "}
-                          for: {activityLog.user.name}
-                        </li>
-                      ))}
+                      {data.completedBy.length ? (
+                          <>
+                                  {/* show user that change the state of task */}
+                            <p className="text-2xl text-slate-600">Changelog</p>
+                            <ul className="list-decimal">
+                              {data.completedBy.map((activityLog) => (
+                                <li key={activityLog._id}>
+                                  <span className="font-bold text-slate-600">
+                                    {statusTranslations[activityLog.status]}
+                                  </span>{" "}
+                                  for: {activityLog.user.name}
+                                </li>
+                              ))}
 
-                    </ul>
+                            </ul>
+                                
+                          </>
+                      ):null}
+                  
                     <div className="my-5 space-y-3">
                       <label className="font-bold">
                         Current status: {data.status}
@@ -149,6 +154,8 @@ export default function TaskModalDetails() {
                         )}
                       </select>
                     </div>
+
+                    
                   </Dialog.Panel>
                 </Transition.Child>
               </div>

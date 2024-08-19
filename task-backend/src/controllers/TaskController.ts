@@ -54,8 +54,10 @@ export class TaskController{
             //     const error = new Error('Action not valide')
             //     return res.status(400).json({error:error.message})
             // }
+
             const task = await Task.findById(req.task.id)
-                        .populate({path:'completedBy.user',select:'id name email'})
+                        .populate({path:'completedBy.user',select:'id name email'})// we bring the details of on user that completed a task
+                        .populate({path:'notes',populate:{path:'createdBy',select:'id name email'}}) //we bring the notes of a taks and user that created the note
             res.json(task)
             
         } catch (error) {

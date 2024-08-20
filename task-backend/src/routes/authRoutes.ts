@@ -58,10 +58,35 @@ router.post('/create-account',
             //next middleware
             return true
         }),
-                handleInputErros,
+         handleInputErros,
         AuthController.updatePasswordWithToken
     )
 
     //route to get the user in session 
     router.get('/user',authenticate,AuthController.user)
+
+    /**Profile */
+    router.put('/profile',authenticate,
+        body('name').notEmpty().withMessage('The name not most empty'),
+        body('email').isEmail().withMessage('The email is no validate'),
+        handleInputErros,
+        AuthController.updateProfile
+    )
+
+    router.post('/update-password',
+        authenticate,
+        body('current_password').notEmpty().withMessage('The current password cant empty'),
+        body('password').isLength({min:8}).withMessage('The password is very short, minimum 8 characters.'),
+        body('password_confirmation').custom((value,{req})=>{
+            //we validated if password is same
+            if(value !== req.body.password){
+                throw new Error('The Password are not same')
+            }
+            //next middleware
+            return true
+        }),
+        handleInputErros,
+        AuthController.updateCurrentUserPassword
+    )
+
 export default router

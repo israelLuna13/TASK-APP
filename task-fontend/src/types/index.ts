@@ -25,6 +25,18 @@ export const userShema=z.object({
 })
 export type User = z.infer<typeof userShema>
 
+
+/**NOTES */
+const noteSchema=z.object({
+    _id:z.string(),
+    content:z.string(),
+    createdBy:userShema,
+    task:z.string(),
+    createdAt:z.string()
+})
+export type Note = z.infer<typeof noteSchema>
+export type NoteFormData = Pick<Note, 'content'>
+
 /*TASKS*/
 //schema of status
 export const taskStatusSchema = z.enum(["pending" , "onHold" , "inProgress" , "underReview" , "completed"])
@@ -39,6 +51,9 @@ export const taskSchema = z.object({
         _id:z.string(),
         user:userShema,
         status:taskStatusSchema
+    })),
+    notes:z.array(noteSchema.extend({
+        createdBy:userShema
     })),
     createdAt:z.string(),
     updatedAt:z.string()

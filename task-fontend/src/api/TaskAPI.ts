@@ -4,7 +4,7 @@ import { isAxiosError } from "axios";
 type TaskAPI = {
     formData:TaskFormData,
     projectId:Project['_id'],
-    taskId:Task['_id']
+    taskid:Task['_id']
     status:Task['status']
 }
 
@@ -20,13 +20,11 @@ export async function createTask({formData,projectId}:Pick<TaskAPI, 'formData'|'
     }
 }
 
-export async function getTaskByid({projectId,taskId}:Pick<TaskAPI, 'projectId'|'taskId'>){
+export async function getTaskByid({projectId,taskid}:Pick<TaskAPI, 'projectId'|'taskid'>){
     try {
-        const url = `/projects/${projectId}/tasks/${taskId}`
+        const url = `/projects/${projectId}/tasks/${taskid}`
         const {data} = await api(url)     
-        const response = taskSchema.safeParse(data)  
-        console.log(response);
-        
+        const response = taskSchema.safeParse(data)          
         if(response.success){
             return response.data
         }
@@ -37,9 +35,9 @@ export async function getTaskByid({projectId,taskId}:Pick<TaskAPI, 'projectId'|'
     }
 }
 
-export async function updateTask({projectId,taskId,formData}:Pick<TaskAPI, 'projectId' | 'taskId' | 'formData'>){
+export async function updateTask({projectId,taskid,formData}:Pick<TaskAPI, 'projectId' | 'taskid' | 'formData'>){
     try {
-        const url = `/projects/${projectId}/task/${taskId}`
+        const url = `/projects/${projectId}/task/${taskid}`
         const {data} = await api.put<string>(url,formData)                
         return data
     } catch (error) {
@@ -49,9 +47,9 @@ export async function updateTask({projectId,taskId,formData}:Pick<TaskAPI, 'proj
     }
 }
 
-export async function deleteTask({projectId,taskId}:Pick<TaskAPI, 'projectId'|'taskId'>){
+export async function deleteTask({projectId,taskid}:Pick<TaskAPI, 'projectId'|'taskid'>){
     try {
-        const url = `/projects/${projectId}/task/${taskId}`
+        const url = `/projects/${projectId}/task/${taskid}`
         const {data} = await api.delete<string>(url)                
         return data
     } catch (error) {
@@ -61,9 +59,9 @@ export async function deleteTask({projectId,taskId}:Pick<TaskAPI, 'projectId'|'t
     }
 }
 
-export async function updateStatus({projectId,taskId,status}:Pick<TaskAPI, 'projectId'|'taskId'|'status'>){
+export async function updateStatus({projectId,taskid,status}:Pick<TaskAPI, 'projectId'|'taskid'|'status'>){
     try {
-        const url = `/projects/${projectId}/task/${taskId}/status`
+        const url = `/projects/${projectId}/task/${taskid}/status`
         const {data} = await api.post<string>(url,{status})                
         return data
     } catch (error) {

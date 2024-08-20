@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { formatDate } from "@/utils/utils";
 import { statusTranslations } from "@/locales/es";
 import { TaskStatus } from "@/types/index";
+import NotesPanel from "../notes/NotesPanel";
 
 export default function TaskModalDetails() {
   const params = useParams();
@@ -21,14 +22,14 @@ export default function TaskModalDetails() {
   const location = useLocation(); // current url
 
   const queryParams = new URLSearchParams(location.search); //query string
-  const taskId = queryParams.get("viewTask")!; // value of query string
-  const show = taskId ? true : false; // to close the modal  
+  const taskid = queryParams.get("viewTask")!; // value of query string
+  const show = taskid ? true : false; // to close the modal  
 
   //query to get task by id
   const { data, isError, error } = useQuery({
-    queryKey: ["task", taskId],
-    queryFn: () => getTaskByid({ projectId, taskId }),
-    enabled: !!taskId, // if taskId is value correct , this query will execute
+    queryKey: ["task", taskid],
+    queryFn: () => getTaskByid({ projectId, taskid }),
+    enabled: !!taskid, // if taskId is value correct , this query will execute
     retry: false,
   });
 
@@ -42,7 +43,7 @@ export default function TaskModalDetails() {
     onSuccess: (data) => {
       //when we changed status , we will do fetch of projectById and taskById to bring new data and show in the page
       queryClient.invalidateQueries({ queryKey: ["project", projectId] });
-      queryClient.invalidateQueries({ queryKey: ["task", taskId] });
+      queryClient.invalidateQueries({ queryKey: ["task", taskid] });
       toast.success(data);
     },
   });
@@ -52,7 +53,7 @@ export default function TaskModalDetails() {
     const status = e.target.value as TaskStatus;
     const data = {
       projectId,
-      taskId,
+      taskid,
       status,
     };
     mutate(data);
@@ -117,7 +118,7 @@ export default function TaskModalDetails() {
                       {data.completedBy.length ? (
                           <>
                                   {/* show user that change the state of task */}
-                            <p className="text-2xl text-slate-600">Changelog</p>
+                            <p className="font-bold text-2xl text-slate-600 my-5">Changelog</p>
                             <ul className="list-decimal">
                               {data.completedBy.map((activityLog) => (
                                 <li key={activityLog._id}>
@@ -155,7 +156,7 @@ export default function TaskModalDetails() {
                       </select>
                     </div>
 
-                    
+                    <NotesPanel notes={data.notes}/>  
                   </Dialog.Panel>
                 </Transition.Child>
               </div>

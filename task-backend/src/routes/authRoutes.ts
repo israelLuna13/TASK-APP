@@ -89,4 +89,11 @@ router.post('/create-account',
         AuthController.updateCurrentUserPassword
     )
 
+    router.post('/check-password',
+        authenticate,
+        body('password').notEmpty().withMessage('The password cant empty'),
+        handleInputErros,
+        AuthController.checkPassword
+    )
+
 export default router

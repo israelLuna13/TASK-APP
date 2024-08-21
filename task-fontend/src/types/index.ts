@@ -17,7 +17,7 @@ export type ConfirmToken = Pick<Auth, 'token'>
 export type ForgotPasswordForm = Pick<Auth, 'email'>
 export type NewPasswordForm = Pick<Auth, 'password' | 'password_confirmation'>
 export type updateCurrentUserPassword = Pick<Auth, 'password' | 'password_confirmation' | 'current_password'>
-
+export type CheckPasswordForm = Pick<Auth, 'password'>
 /**USERS */
 export const userShema=z.object({
     _id:z.string(),

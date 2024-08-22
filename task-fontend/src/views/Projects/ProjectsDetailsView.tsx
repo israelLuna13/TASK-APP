@@ -1,4 +1,4 @@
-import { getProjectById } from "@/api/ProjectAPI";
+import { getFullProjectDetails } from "@/api/ProjectAPI";
 import AddTaskModal from "@/components/tasks/AddTaskModal";
 import EditTaskData from "@/components/tasks/EditTaskData";
 import TaskList from "@/components/tasks/TaskList";
@@ -19,10 +19,12 @@ export default function ProjectsDetailsView() {
   //with useQuery we call the function getProjectById
   const { data, isLoading, isError } = useQuery({
     queryKey: ["project", projectId],
-    queryFn: () => getProjectById(projectId), // we use callback when the function it have arguments
+    queryFn: () => getFullProjectDetails(projectId), // we use callback when the function it have arguments
     retry: false, // if the query is false or is error not will try again
   });
 
+  console.log(data);
+  
   //we validate if the user in session is a manager of project, this memo we send with taskList and taskCard
   const canEdit = useMemo(()=>data?.manager === user?._id,[data,user])  
     //we waiting the data of function getProjects and getUser

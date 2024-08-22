@@ -25,24 +25,27 @@ router.post('/',
 
     //get project by id
     router.get('/:id',param('id').isMongoId().withMessage('Not valid id'),handleInputErros,ProjectController.getProjectById)
+    
+    //all routes that it have projectId it execute the middleware projectExists,not to put into the controller
+    router.param('projectId',projectExists)
+
     //update project
-    router.put('/:id',
-    param('id').isMongoId().withMessage('Not valid id'),
+    router.put('/:projectId',
+    param('projectId').isMongoId().withMessage('Not valid id'),
     body('projectName').notEmpty().withMessage('The name of projects is obligation'),
     body('clientName').notEmpty().withMessage('The name of client is obligation'),
     body('description').notEmpty().withMessage('The description of projects is obligation')
-    ,handleInputErros,ProjectController.updateProject)
+    ,hasAuthorization,handleInputErros,ProjectController.updateProject)
 
     //delete project
-    router.delete('/:id',param('id').isMongoId().withMessage('Not valid id'),handleInputErros,ProjectController.deleteProject)
+    router.delete('/:projectId',param('projectId').isMongoId().withMessage('Not valid id'),handleInputErros,hasAuthorization,ProjectController.deleteProject)
 
     //-------------------------------------------------------------------routes task------------------------------------------------------------------- 
    
-    //all routes that it have projectId it execute the middleware projectExists,not to put into the controller
     //Some routes will have the Authorization middleware to validate if the user has permission to make changes to the task.
 
 
-    router.param('projectId',projectExists)
+    //router.param('projectId',projectExists)
 
     router.post('/:projectId/task',
         hasAuthorization,

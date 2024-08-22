@@ -53,21 +53,22 @@ export class ProjectController{
     }
 
     static updateProject = async(req:Request, res:Response)=>{
-        const {id} = req.params
-        const project = await Project.findById(id)
-        if(!project){
-            const error = new Error('Project not found')
-            return res.status(404).json({error:error.message})
-        }
+        //all code tha was be here , it is in middleware
+       // const {id} = req.params
+        // const project = await Project.findById(id)
+        // if(!project){
+        //     const error = new Error('Project not found')
+        //     return res.status(404).json({error:error.message})
+        // }
                //We validate that the person who is in session is the owner of the project
-        if(project.manager.toString() != req.user.id.toString()){
-            const error = new Error('Only manager can update the project')
-            return res.status(404).json({error:error.message})
-        }
-        project.clientName = req.body.clientName
-        project.projectName = req.body.projectName
-        project.description = req.body.description
-        await project.save()
+        // if(project.manager.toString() != req.user.id.toString()){
+        //     const error = new Error('Only manager can update the project')
+        //     return res.status(404).json({error:error.message})
+        // }
+        req.project.clientName = req.body.clientName
+        req.project.projectName = req.body.projectName
+        req.project.description = req.body.description
+        await req.project.save()
         res.send('Updated project')
         
         try {
@@ -78,20 +79,20 @@ export class ProjectController{
     }
 
     static deleteProject = async(req:Request, res:Response)=>{
-        const {id} = req.params
+       // all code tha was be here , it is in middleware
+       // const {id} = req.params
         try {
-            const project = await Project.findById(id)
-            if(!project){
-                const error = new Error('Project not found')
-                return res.status(404).json({error:error.message})
-            }
-            //We validate that the person who is in session is the owner of the project
-            if(project.manager.toString() != req.user.id.toString()){
-                const error = new Error('Only manager can delete the project')
-                return res.status(404).json({error:error.message})
-            }
-           await project.deleteOne()
-            console.log(project);
+            // const project = await Project.findById(id)
+            // if(!project){
+            //     const error = new Error('Project not found')
+            //     return res.status(404).json({error:error.message})
+            // }
+            // //We validate that the person who is in session is the owner of the project
+            // if(project.manager.toString() != req.user.id.toString()){
+            //     const error = new Error('Only manager can delete the project')
+            //     return res.status(404).json({error:error.message})
+            // }
+           await req.project.deleteOne()
             res.send('Project deleted')
         } catch (error) {
             console.log(error);

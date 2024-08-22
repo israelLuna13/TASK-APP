@@ -1,5 +1,5 @@
 import api from '@/lib/axios';
-import {dasboardProjectSchema, ProjectFormData} from '@/types/index'
+import {dasboardProjectSchema, editProjectSchema, ProjectFormData, projectSchema} from '@/types/index'
 import { isAxiosError } from 'axios';
 import { Project } from '@/types/index';
 
@@ -44,11 +44,32 @@ export async function getProject(){
     }
 }
 
-//we get project and we validate projects with the schema
 export async function getProjectById(id:Project['_id']){
     try {        
         const {data} = await api.get(`/projects/${id}`)
-            return data     
+        const response = editProjectSchema.safeParse(data)
+        if(response.success){
+            return response.data    
+        }
+    } catch (error) {
+        //we validate if is a error of axios and the error it have a response
+        if(isAxiosError(error) && error.response){
+            //we make a new error to handle in other parts of our application
+            throw new Error(error.response.data.error)
+        }
+    }
+}
+
+export async function getFullProjectDetails(id:Project['_id']){
+    try {        
+        const {data} = await api.get(`/projects/${id}`)
+        const response = projectSchema.safeParse(data)
+        console.log(response);
+        console.log(data);
+        
+        if(response.success){
+            return response.data    
+        }
     } catch (error) {
         //we validate if is a error of axios and the error it have a response
         if(isAxiosError(error) && error.response){

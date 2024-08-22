@@ -1,4 +1,5 @@
 import mongoose,{Schema, Document,Types} from 'mongoose'
+import Note from './Note'
 //dictionary of value of state the task
 const taskStatus={
     PENDING: 'pending',
@@ -66,6 +67,14 @@ export interface ITask extends Document  {
         }
     ]
    },{timestamps:true})
+
+   //middleware
+   //we eliminated the notes that belong task when we deleted a task
+   TaskSchema.pre('deleteOne',{document:true}, async function(){
+    const taskid = this._id
+    if(!taskid) return 
+    await Note.deleteMany({task:taskid})    
+   })
 
 //Make the model with typescript type of ITask and structure of TaskSchema
    const Task = mongoose.model<ITask>('Task',TaskSchema)

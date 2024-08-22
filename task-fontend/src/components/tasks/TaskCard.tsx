@@ -3,16 +3,20 @@ import {EllipsisVerticalIcon} from '@heroicons/react/20/solid'
 import { Menu,Transition } from '@headlessui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {useMutation, useQueryClient} from '@tanstack/react-query'
-import { Task } from '@/types/index'
+import { TaskProject } from '@/types/index'
 import { deleteTask } from '@/api/TaskAPI';
 import { toast } from 'react-toastify';
+import { useDraggable } from '@dnd-kit/core';
 
 type TaskCardProps = {
-    task:Task
+    task:TaskProject
     canEdit: boolean
 }
 
 export default function TaskCard({task,canEdit}:TaskCardProps) {
+  const {attributes,listeners,setNodeRef,transform} = useDraggable({
+    id:task._id
+  })
 
   const navigate = useNavigate()
   const params = useParams()
@@ -31,18 +35,30 @@ export default function TaskCard({task,canEdit}:TaskCardProps) {
       toast.success(data)
     }
   })
+
+  //style of our task when we take the task
+  const style = transform ? {
+    transform:`translate3d(${transform.x}px,${transform.y}px,0)`,
+    padding:"1.25rem",
+    backgroundColor:'#FFF',
+    width:'300px',
+    display:'flex',
+    borderWidth:'1px',
+    borderColor:'rgb(203 213 225 / var(--tw-border-opacity))'
+  }: undefined
   
   return (
     <li className="p-5 bg-white border-slate-300 flex justify-between gap-3">
-      <div className="min-w-0 flex flex-col gap-y-4">
-        <button
+            {/* attributes to drag and drop */}
+      <div {...listeners} {...attributes} ref={setNodeRef} style={style}  className="min-w-0 flex flex-col gap-y-4">
+        <p
           className="text-xl font-bold text-slate-600 text-left"
-          type="button"
-          // open modal to see details of task
-          onClick={()=>navigate(location.pathname + `?viewTask=${task._id}`)}
+          // type="button"
+          // // open modal to see details of task
+          // onClick={()=>navigate(location.pathname + `?viewTask=${task._id}`)}
         >
           {task.name}
-        </button>
+        </p>
         <p className="text-slate-500">{task.description}</p>
       </div>
 
@@ -91,7 +107,7 @@ export default function TaskCard({task,canEdit}:TaskCardProps) {
                   type="button"
                   className="block px-3 py-1 text-sm leading-6 text-red-500"
                   //we execute the mutate of delete
-                  onClick={()=>mutate({projectId,taskId:task._id})}
+                  onClick={()=>mutate({projectId,taskid:task._id})}
                 >
                   Delete Task
                 </button>

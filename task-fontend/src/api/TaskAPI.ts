@@ -23,11 +23,12 @@ export async function createTask({formData,projectId}:Pick<TaskAPI, 'formData'|'
 export async function getTaskByid({projectId,taskid}:Pick<TaskAPI, 'projectId'|'taskid'>){
     try {
         const url = `/projects/${projectId}/tasks/${taskid}`
-        const {data} = await api(url)     
-        const response = taskSchema.safeParse(data)          
-        if(response.success){
-            return response.data
-        }
+        const {data} = await api<Task>(url)     
+        // const response = taskSchema.safeParse(data)          
+        // if(response.success){
+        //     return response.data
+        // }
+        return data
     } catch (error) {
         if(isAxiosError(error) && error.response){
             throw new Error(error.response.data.error)

@@ -10,10 +10,10 @@ import { toast } from 'react-toastify';
 
 type EditTaskModalProps={
     data :Task
-    taskId:Task['_id']
+    taskid:Task['_id']
 }
 
-export default function EditTaskModal({data,taskId}:EditTaskModalProps) {
+export default function EditTaskModal({data,taskid}:EditTaskModalProps) {
     const navigate = useNavigate()
      //get projectid
      const params = useParams()
@@ -34,7 +34,7 @@ export default function EditTaskModal({data,taskId}:EditTaskModalProps) {
         onSuccess:(data)=>{
             //when we created a task we will execute the query to get a project by id, to upload the page
             queryClient.invalidateQueries({queryKey:["project",projectId]})
-            queryClient.invalidateQueries({queryKey:["task",taskId]})
+            queryClient.invalidateQueries({queryKey:["task",taskid]})
             toast.success(data)
             reset() // reset form
             navigate(location.pathname,{replace:true})//we delete the query of the url to hidden the modal
@@ -45,7 +45,7 @@ export default function EditTaskModal({data,taskId}:EditTaskModalProps) {
     const handleEditTAsk=(formData:TaskFormData)=>{
         const data = {
             projectId,
-            taskId,
+            taskid,
             formData
         }
         mutate(data)

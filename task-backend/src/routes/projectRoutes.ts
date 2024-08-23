@@ -8,16 +8,16 @@ import { hasAuthorization, taskExists, tasksBelongsToProject } from '../middlewa
 import { authenticate } from '../middleware/auth'
 import { TeamMemberController } from '../controllers/TeamController'
 import { NoteController } from '../controllers/NoteController'
-import Note from '../models/Note'
 const router = Router()
     //-------------------------------------------------------------------routes project------------------------------------------------------------------- 
 
-//create project
-router.use(authenticate) //to not put authenticate in each route
-router.post('/',
-    body('projectName').notEmpty().withMessage('The name of projects is obligation'),
-    body('clientName').notEmpty().withMessage('The name of client is obligation'),
-    body('description').notEmpty().withMessage('The description of projects is obligation'),
+    router.use(authenticate) //each route will have this middlewaare
+
+    //create project
+    router.post('/',
+    body('projectName').notEmpty().withMessage('The name project is required'),
+    body('clientName').notEmpty().withMessage('The name client is required'),
+    body('description').notEmpty().withMessage('The description projects is required'),
     handleInputErros,
     ProjectController.createProject)
     //get all project
@@ -58,7 +58,7 @@ router.post('/',
         TaskController.getProjectTasks
       )
 
-      //all routes that it have taskid it execute the middleware taskExists and tasksBelongsToProject ,not to put into the controller
+      //all routes that it have taskid it will execute the middleware taskExists and tasksBelongsToProject ,not to put into the controller
       router.param('taskid',taskExists)
       router.param('taskid',tasksBelongsToProject)
 
@@ -86,7 +86,7 @@ router.post('/',
             handleInputErros,
             TaskController.updateStatus)
 
-//routes for teams
+                                                                                        //routes teams
         router.post('/:projectId/team/find',
           body('email').isEmail().toLowerCase().withMessage('E-mail not validate'),
           handleInputErros,
@@ -109,7 +109,7 @@ router.post('/',
           TeamMemberController.removeMemberById
         )
 
-        //routes for notes
+                                                                                        //routes for notes
         router.post('/:projectId/tasks/:taskid/notes',
           body('content').notEmpty().withMessage('The content is required'),
           handleInputErros,

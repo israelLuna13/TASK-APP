@@ -1,4 +1,4 @@
-import {TypeOf, z} from 'zod'
+import { z} from 'zod'
 
 /**AUth & Users */
 const authSchema = z.object({
@@ -65,12 +65,10 @@ export const taskProjectSchema = taskSchema.pick({
     description:true,
     status:true
 })
-//
 export type Task = z.infer<typeof taskSchema>
 //type when we will create a task
 export type TaskFormData = Pick<Task, 'name' | 'description'>
 export type TaskProject = z.infer<typeof taskProjectSchema>
-
 
 /**
  * Projects

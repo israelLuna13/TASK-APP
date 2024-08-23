@@ -1,5 +1,5 @@
 import {DndContext, DragEndEvent} from '@dnd-kit/core'
-import { Project, Task, TaskProject, TaskStatus } from "@/types/index"
+import { Project, TaskProject, TaskStatus } from "@/types/index"
 import TaskCard from "./TaskCard"
 import { statusTranslations } from "@/locales/es"
 import DropTask from "./DropTask"
@@ -60,16 +60,23 @@ export default function TaskList({tasks,canEdit}:TaskListProps) {
         return { ...acc, [task.status]: currentGroup };
     }, initialStatusGroups);    
     
-    //when we drop the task 
+    //function is called when the user finishes dragging an item 
+    //the event e constains information abour the item thas was being dragged and where it was dropped
     const handleDragEnd =(e:DragEndEvent)=>{
+      //over: location where the item was dropped
+      //active : represents the item that was being dragged
       const {over,active} = e
 
+      //checks if the item was droppend in a valid area thas has an id
       if(over && over.id){
           const taskid=active.id.toString()
           const status = over.id as TaskStatus
-          mutate({projectId,taskid,status})
+          mutate({projectId,taskid,status})//we update status 
+          //update the local state
           queryClient.setQueryData(["project", projectId], (prevData:Project)=>{
+
             const updateTask=prevData.tasks.map((task)=>{
+              //update status
               if(task._id == taskid){
                 return {
                   ...task,status
@@ -77,6 +84,7 @@ export default function TaskList({tasks,canEdit}:TaskListProps) {
               }
               return task
             })
+            //project with update status
             return {
               ...prevData,tasks:updateTask
             }

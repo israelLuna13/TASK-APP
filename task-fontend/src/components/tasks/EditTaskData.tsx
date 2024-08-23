@@ -12,7 +12,7 @@ export default function EditTaskData() {
 
     const {data, isError} = useQuery({
         queryKey:['task',taskId],
-        queryFn:()=>getTaskByid({projectId,taskId}),
+        queryFn:()=>getTaskByid({projectId,taskid:taskId}),
         enabled:!!taskId, //this query not will execute if taskid is null o undefine
         retry:false // we disable automatic attempts
     })
@@ -20,5 +20,5 @@ export default function EditTaskData() {
     if(isError) return <Navigate to={'/404'}/>
     
     
- if(data) return <EditTaskModal data={data} taskId={taskId}/>
+ if(data) return <EditTaskModal data={data} taskid={taskId}/>
 }
